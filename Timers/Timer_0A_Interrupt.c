@@ -44,11 +44,14 @@ void Timer_0A_Interrupt_Init(void(*task)(void))
 	// 0x2 = Periodic Timer Mode
 	TIMER0->TAMR |= 0x02;
 	
-	// Set the prescale value to 50 by setting the bits of the 
+	// Clear the bits of the TAPSR field (Bits 7 to 0) in the
+	// GPTMTAPR register before setting the prescale value
+	TIMER0->TAPR &= ~0x000000FF;
+	
+	// Set the prescale value to 50 by setting the bits of the
 	// TAPSR field (Bits 7 to 0) in the GPTMTAPR register
 	// New timer clock frequency = (50 MHz / 50) = 1 MHz
-	// Note: Only write to Bits 7 to 0
-	TIMER0->TAPR = (TIMER0->TAPR & 0x000000FF) | 50;
+	TIMER0->TAPR |= 50;
 	
 	// Set the timer interval load value by writing to the
 	// TAILR field (Bits 31 to 0) in the GPTMTAILR register
