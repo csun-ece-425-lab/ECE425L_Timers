@@ -28,7 +28,7 @@ static uint8_t ms_active = 0;
 void SysTick_Delay_Init(void)
 {	
 	// Set the SysTick timer reload value for 1 us intervals
-	// Each clock cycle is (1 / 4 MHz) = 0.25 ns
+	// Each clock cycle is (1 / 4 MHz) = 0.25 us
 	SysTick->LOAD = (4 - 1);
 	
 	// Clear the VAL register by writing any value to it
