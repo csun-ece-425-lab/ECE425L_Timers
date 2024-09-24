@@ -3,10 +3,13 @@
  *
  * @brief Source code for the SysTick_Delay driver.
  *
- * It provides a blocking function (SysTick_Delay1ms) to create a delay with a busy-wait loop 
- * and it uses the SysTick timer with a specified reload value to generate interrupts every 1 ms.
- * It uses the Peripheral Internal Oscillator (PIOSC) as the clock source.
- * The PIOSC provides 16 MHz which is then divided by 4. The timer is used for creating delays in milliseconds.
+ * It provides two blocking functions, SysTick_Delay1ms and SysTick_Delay1us,
+ * to create a delay with a busy-wait loop. It uses the SysTick timer with 
+ * a specified reload value to generate interrupts every 1 us.
+ * 
+ * In addition, it uses the Peripheral Internal Oscillator (PIOSC) 
+ * as the clock source. The PIOSC provides 16 MHz which is then divided by 4. 
+ * The timer is used for creating delays in either microseconds or milliseconds.
  *
  * @author Aaron Nanas
  */
@@ -24,8 +27,12 @@ static uint8_t ms_active = 0;
 
 void SysTick_Delay_Init(void)
 {	
-	// Set the SysTick timer reload value for 1 ms intervals
+	// Set the SysTick timer reload value for 1 us intervals
+	// Each clock cycle is (1 / 4 MHz) = 0.25 ns
 	SysTick->LOAD = (4 - 1);
+	
+	// Clear the VAL register by writing any value to it
+	SysTick->VAL = 0;
 	
 	// Enable the SysTick timer and its interrupt
 	// with the Peripheral Internal Oscillator (PIOSC) as the clock source
